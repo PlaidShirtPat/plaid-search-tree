@@ -70,7 +70,7 @@ class PlaidSearchTree {
     newP.p = node.p
 
     // if node was the root of the tree, newP becomes the new root
-    if(this.isRoot(node.p)) {
+    if(this.isRoot(node)) {
       this.root = newP
     }
     // if node was not the root, we must have node's parent adopt newP
@@ -163,8 +163,8 @@ class PlaidSearchTree {
       str += space.repeat(rowIndent)
       for(let j=0; j < row.length; j++) {
         let node = row[j]
-        let prettyKey = key
-          .padRight(keyLen)     // ensure key length is at least keyLen chars
+        let prettyKey = node.key
+          .padEnd(keyLen)       // ensure key length is at least keyLen chars
           .substring(0, keyLen) // truncate key to keyLen
         str += prettyKey
         str += nodeSeperator
