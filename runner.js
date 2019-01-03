@@ -22,3 +22,7 @@ console.log(myTree.prettyPrint())
 console.log('leftRotate root')
 myTree.leftRotate(myTree.root)
 console.log(myTree.prettyPrint())
+
+console.log('rightRotate root')
+myTree.rightRotate(myTree.root)
+console.log(myTree.prettyPrint())

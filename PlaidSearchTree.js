@@ -89,6 +89,39 @@ class PlaidSearchTree {
   }
 
   rightRotate(node) {
+    if(node.left === null)
+      throw new Error('rightRotate attempted on node without left child')
+
+    // grab node that will become the new parent of node
+    let newP = node.left   
+    
+    // node will become the right child of newP, node adopts newP's old right child
+    node.left = newP.right  
+    // complete the adoption of newP.right (if newP.right is non-null)
+    // in the book, it references node.left as newP.right, I wonder why
+    if(node.left !== null)
+      node.left.p = node
+
+    // newP 'adopts' node's parent as it's own parent
+    newP.p = node.p
+
+    // if node was the root of the tree, newP becomes the new root
+    if(this.isRoot(node)) {
+      this.root = newP
+    }
+    // if node was not the root, we must have node's parent adopt newP
+    // handle node being node.p's right child
+    else if(node.p.right === node) {
+      node.p.right = newP
+    } 
+    // handle node being node.p's left child
+    else {
+      node.p.left = newP
+    }
+  
+    // newP finally adopts node as it's right child
+    newP.right = node
+    node.p = newP
   }
 
   inOrderWalk(node) {
