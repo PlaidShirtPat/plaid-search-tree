@@ -52,6 +52,11 @@ Mkfile.old
 dkms.conf
 
 # NodeJS
-
 node_modules
+
+# vim files
+# you must define your own local .vimrc
+.vimrc
+# vim swap files 
+*.swp 
 
