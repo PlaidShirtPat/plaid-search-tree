@@ -22,7 +22,7 @@ class PlaidNode {
 
 class PlaidSearchTree {
 
-  constructor(opts) {
+  constructor(opts = {}) {
     this.root = null
   }
 
@@ -35,8 +35,6 @@ class PlaidSearchTree {
       node.right  = null
       node.p      = null
       this.root   = node
-    }
-    while( ) {
     }
   }
 
@@ -94,6 +92,88 @@ class PlaidSearchTree {
   }
 
   inOrderWalk(node) {
+  }
+
+  /* helper function to convert tree into an array of rows */
+  static _toRows(rootNode) {
+    let level     = 0
+    let rows      = []
+    let currQueue = [] // holds current row's nodes
+    let nextQueue = [] // hold's current row's children
+
+    // push first node
+    currQueue.push(rootNode)
+
+    // collect rows - Breadth First Traversal non-recursive
+    while(currQueue.length > 0) {
+      rows[level] = []
+
+      // queue children
+      while(currQueue.length > 0) {
+        let node = currQueue.shift()
+        rows[level].push(node)
+        if(node.left !== null)
+          nextQueue.push(node.left)
+        if(node.right !== null)
+          nextQueue.push(node.right)
+      }
+
+      // swap empty currQueue with nextQueue
+      let tmp = currQueue
+      currQueue = nextQueue
+      nextQueue = tmp
+      // increment level
+      level++
+    }
+
+    return rows
+  }
+
+  toRows() {
+    return PlaidSearchTree._toRows(this.root)
+  }
+
+  /*
+  truncates keys to 3 chars
+
+  indent          graph
+   V                V
+  14|              hhh
+    |              / \
+   6|      ddd             lll
+    |      / \             / \ 
+   2|  bbb     fff     jjj     nnn
+    |  / \     / \     / \     / \
+   0|aaa ccc eee ggg iii kkk mmm ooo
+  */
+  prettyPrint() {
+    let rows    = this.toRows()
+    let levels  = rows.length
+    let keyLen  = 3
+    let str = ""
+    let space = " "
+
+    for(let i=0; i < levels; i++) {
+      let row = rows[i]
+      let height = levels-i
+      // the indent is equal to the 2^X where X = row's height
+      let rowIndent   = Math.pow(2, height) - Math.ceil(keyLen/2)
+      // the offset is equal to the last row's indent - 1
+      let nodeOffset  = Math.pow(2, height+1) - Math.ceil(keyLen/2) - 1
+      let nodeSeperator = space.repeat(nodeOffset)
+      
+      // write row
+      str += space.repeat(rowIndent)
+      for(let j=0; j < row.length; j++) {
+        let node = row[j]
+        str += node.key.substring(0, keyLen)
+        str += nodeSeperator
+      }
+      str += '\n'
+      //TODO: add branch chars / \
+    }
+
+    return str
   }
 
   remove(value) {
