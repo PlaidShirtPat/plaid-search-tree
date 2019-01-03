@@ -138,19 +138,23 @@ class PlaidSearchTree {
     currQueue.push(rootNode)
 
     // collect rows - Breadth First Traversal non-recursive
-    while(currQueue.length > 0) {
+    while(currQueue.length > 0 && !currQueue.every(e => e === null)) {
+       
       rows[level] = []
 
-      // queue children
-      while(currQueue.length > 0) {
+      // queue children unless every child is null
+      while(currQueue.length > 0 ) {
         let node = currQueue.shift()
         rows[level].push(node)
-        if(node.left !== null)
+        // fill gaps with nulls
+        if(node === null) {
+          nextQueue.push(null)
+          nextQueue.push(null)
+        } else {
           nextQueue.push(node.left)
-        if(node.right !== null)
           nextQueue.push(node.right)
+        }
       }
-
       // swap empty currQueue with nextQueue
       let tmp = currQueue
       currQueue = nextQueue
@@ -196,9 +200,16 @@ class PlaidSearchTree {
       str += space.repeat(rowIndent)
       for(let j=0; j < row.length; j++) {
         let node = row[j]
-        let prettyKey = node.key
-          .padEnd(keyLen)       // ensure key length is at least keyLen chars
-          .substring(0, keyLen) // truncate key to keyLen
+
+        let prettyKey 
+        if(node !== null) {
+          prettyKey = node.key
+            .padEnd(keyLen)       // ensure key length is at least keyLen chars
+            .substring(0, keyLen) // truncate key to keyLen
+        } else {
+          prettyKey = space.repeat(keyLen)
+        }
+
         str += prettyKey
         str += nodeSeperator
       }
