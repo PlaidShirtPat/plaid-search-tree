@@ -139,11 +139,8 @@ class PlaidSearchTree {
   indent          graph
    V                V
   14|              hhh
-    |              / \
    6|      ddd             lll
-    |      / \             / \ 
    2|  bbb     fff     jjj     nnn
-    |  / \     / \     / \     / \
    0|aaa ccc eee ggg iii kkk mmm ooo
   */
   prettyPrint() {
@@ -166,11 +163,13 @@ class PlaidSearchTree {
       str += space.repeat(rowIndent)
       for(let j=0; j < row.length; j++) {
         let node = row[j]
-        str += node.key.substring(0, keyLen)
+        let prettyKey = key
+          .padRight(keyLen)     // ensure key length is at least keyLen chars
+          .substring(0, keyLen) // truncate key to keyLen
+        str += prettyKey
         str += nodeSeperator
       }
       str += '\n'
-      //TODO: add branch chars / \
     }
 
     return str
